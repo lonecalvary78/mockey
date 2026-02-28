@@ -1,5 +1,5 @@
-//go:build !mockey_disable_ss && go1.23 && !go1.26
-// +build !mockey_disable_ss,go1.23,!go1.26
+//go:build !mockey_disable_ss && go1.23 && !go1.27
+// +build !mockey_disable_ss,go1.23,!go1.27
 
 /*
  * Copyright 2022 ByteDance Inc.
