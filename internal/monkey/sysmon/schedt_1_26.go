@@ -1,5 +1,5 @@
-//go:build go1.25 && !go1.27
-// +build go1.25,!go1.27
+//go:build go1.26 && !go1.27
+// +build go1.26,!go1.27
 
 /*
  * Copyright 2022 ByteDance Inc.
@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-package tool
+package sysmon
 
-// gGoroutineIDOffset Go1.25 removed the `gobuf.ret` field before goid
-const gGoroutineIDOffset = 152
+const (
+	sysmonLockOffset = 352
+)

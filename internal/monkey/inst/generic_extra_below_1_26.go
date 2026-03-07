@@ -1,5 +1,5 @@
-//go:build go1.25 && !go1.27
-// +build go1.25,!go1.27
+//go:build !go1.26
+// +build !go1.26
 
 /*
  * Copyright 2022 ByteDance Inc.
@@ -17,7 +17,19 @@
  * limitations under the License.
  */
 
-package tool
+package inst
 
-// gGoroutineIDOffset Go1.25 removed the `gobuf.ret` field before goid
-const gGoroutineIDOffset = 152
+import (
+	_ "unsafe"
+)
+
+func initDuffFunc() {
+	duffcopy = duffcopy0
+	duffzero = duffzero0
+}
+
+//go:linkname duffcopy0 runtime.duffcopy
+func duffcopy0()
+
+//go:linkname duffzero0 runtime.duffzero
+func duffzero0()

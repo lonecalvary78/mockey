@@ -1,5 +1,5 @@
-//go:build go1.25 && !go1.27
-// +build go1.25,!go1.27
+//go:build go1.26 && !go1.27
+// +build go1.26,!go1.27
 
 /*
  * Copyright 2022 ByteDance Inc.
@@ -17,7 +17,20 @@
  * limitations under the License.
  */
 
-package tool
+package inst
 
-// gGoroutineIDOffset Go1.25 removed the `gobuf.ret` field before goid
-const gGoroutineIDOffset = 152
+import (
+	"reflect"
+
+	"github.com/bytedance/mockey/internal/monkey/fn"
+	"github.com/bytedance/mockey/internal/monkey/linkname"
+)
+
+func initDuffFunc() {
+	if duffcopyPC := linkname.FuncPCForName("runtime.duffcopy"); duffcopyPC > 0 {
+		duffcopy = fn.MakeFunc(reflect.TypeOf(duffcopy), duffcopyPC).Interface().(func())
+	}
+	if duffzeroPC := linkname.FuncPCForName("runtime.duffzero"); duffzeroPC > 0 {
+		duffzero = fn.MakeFunc(reflect.TypeOf(duffzero), duffzeroPC).Interface().(func())
+	}
+}
