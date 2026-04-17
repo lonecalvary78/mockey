@@ -54,6 +54,10 @@ func getMethod(val reflect.Value, methodName string, opts *methodOption) (method
 	if kind == reflect.Ptr || kind == reflect.Interface {
 		val = val.Elem()
 		if !val.IsValid() {
+			// if is nil pointer but with type, try get method from pointer type
+			if m, ok := typ.MethodByName(methodName); ok {
+				return m.Func, true
+			}
 			return
 		}
 		typ = val.Type()
