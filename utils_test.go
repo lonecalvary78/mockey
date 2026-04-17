@@ -462,3 +462,30 @@ func TestGetMethod_Unexported(t *testing.T) {
 		})
 	})
 }
+
+type testNilPointerInner struct {
+	_ int
+}
+
+func (t *testNilPointerInner) Foo() string {
+	return "not here"
+}
+
+type testNilPointerOuter struct {
+	*testNilPointerInner
+}
+
+func TestGetMethod_NilPointer(t *testing.T) {
+	PatchConvey("TestGetMethod_NilPointer", t, func() {
+		PatchConvey("nil pointer", func() {
+			var obj *testNilPointerInner
+			Mock(GetMethod(obj, "Foo")).Return("nil pointer").Build()
+			convey.So(obj.Foo(), convey.ShouldEqual, "nil pointer")
+		})
+		PatchConvey("nested nil pointer", func() {
+			var obj = &testNilPointerOuter{}
+			Mock(GetMethod(obj, "Foo")).Return("nested pointer").Build()
+			convey.So(obj.Foo(), convey.ShouldEqual, "nested pointer")
+		})
+	})
+}
